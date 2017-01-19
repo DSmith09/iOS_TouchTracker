@@ -9,63 +9,91 @@
 import UIKit
 
 class DrawView: UIView {
-    var currentLine: Line?
+    var currentLines: [NSValue: Line] = [NSValue: Line]()
     var finishedLines: [Line]! = [Line]()
+    
+    // MARK: Interface Builder attributes
+    @IBInspectable var finishedLineColor: UIColor = UIColor.black {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    
+    @IBInspectable var currentLineColor: UIColor = UIColor.red {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    
+    @IBInspectable var lineThickness: CGFloat = 10 {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    
+    // MARK: Draw
+    override func draw(_ rect: CGRect) {
+        // Draw finished lines in black
+        finishedLineColor.setStroke()
+        for line in finishedLines {
+            strokeLine(line: line)
+        }
+        // Draw the current line(s) in red
+        currentLineColor.setStroke()
+        for (_, line) in currentLines {
+            strokeLine(line: line)
+        }
+    }
     
     func strokeLine(line: Line) {
         let path = UIBezierPath()
-        path.lineWidth = 10
+        path.lineWidth = lineThickness
         path.lineCapStyle = CGLineCap.round
-        
         path.move(to: line.begin)
         path.addLine(to: line.end)
         path.stroke()
     }
     
-    override func draw(_ rect: CGRect) {
-        // Draw finished lines in black
-        UIColor.black.setStroke()
-        for line in finishedLines {
-            strokeLine(line: line)
-        }
-        // Draw the current line in red
-        if let line = currentLine as Line! {
-            UIColor.red.setStroke()
-            strokeLine(line: line)
-        }
-    }
-    
+    // MARK: UIResponder Events for Touch
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.first!
-        
-        // Get the location of the touch in the view's coordinates
-        let location = touch.location(in: self)
-        // Default location is the point of entry
-        currentLine = Line(begin: location, end: location)
-        
-        // Refreshes view
+        print(#function)
+        for touch in touches {
+            let location = touch.location(in: self)
+            let newLine = Line(begin: location, end: location)
+            let newKey = NSValue(nonretainedObject: touch)
+            currentLines.updateValue(newLine, forKey: newKey)
+        }
+        // Refresh view
         setNeedsDisplay()
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.first!
-        
-        let location = touch.location(in: self)
-        // As the finger moves - update the final end point to create a line
-        currentLine?.end = location
-        
+        print(#function)
+        for touch in touches {
+            // As the finger moves - update the final end point to create a line
+            currentLines[NSValue(nonretainedObject: touch)]?.end = touch.location(in: self)
+        }
         setNeedsDisplay()
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if var line = currentLine as Line! {
-            let touch = touches.first!
-            let location = touch.location(in: self)
-            line.end = location
-            finishedLines.append(line)
+        print(#function)
+        for touch in touches {
+            let key = NSValue(nonretainedObject: touch)
+            if var line = currentLines[key] as Line! {
+                line.end = touch.location(in: self)
+                finishedLines.append(line)
+                // Remove value
+                currentLines.removeValue(forKey: key)
+            }
         }
-        // Reset
-        currentLine = nil
+        
+        setNeedsDisplay()
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print(#function)
+        currentLines.removeAll()
         
         setNeedsDisplay()
     }
