@@ -12,6 +12,8 @@
 		AB59A5BF1E307AB900EF3585 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB59A5BD1E307AB900EF3585 /* Main.storyboard */; };
 		AB59A5C11E307AB900EF3585 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB59A5C01E307AB900EF3585 /* Assets.xcassets */; };
 		AB59A5C41E307AB900EF3585 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB59A5C21E307AB900EF3585 /* LaunchScreen.storyboard */; };
+		AB59A5CC1E307ADD00EF3585 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB59A5CB1E307ADD00EF3585 /* Line.swift */; };
+		AB59A5CE1E307BE100EF3585 /* DrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB59A5CD1E307BE100EF3585 /* DrawView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,8 @@
 		AB59A5C01E307AB900EF3585 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AB59A5C31E307AB900EF3585 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AB59A5C51E307AB900EF3585 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AB59A5CB1E307ADD00EF3585 /* Line.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
+		AB59A5CD1E307BE100EF3585 /* DrawView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +60,8 @@
 			children = (
 				AB59A5B91E307AB900EF3585 /* AppDelegate.swift */,
 				AB59A5BB1E307AB900EF3585 /* ViewController.swift */,
+				AB59A5CB1E307ADD00EF3585 /* Line.swift */,
+				AB59A5CD1E307BE100EF3585 /* DrawView.swift */,
 				AB59A5BD1E307AB900EF3585 /* Main.storyboard */,
 				AB59A5C01E307AB900EF3585 /* Assets.xcassets */,
 				AB59A5C21E307AB900EF3585 /* LaunchScreen.storyboard */,
@@ -96,6 +102,7 @@
 				TargetAttributes = {
 					AB59A5B51E307AB900EF3585 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = QJYFTX722N;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -136,7 +143,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB59A5CC1E307ADD00EF3585 /* Line.swift in Sources */,
 				AB59A5BC1E307AB900EF3585 /* ViewController.swift in Sources */,
+				AB59A5CE1E307BE100EF3585 /* DrawView.swift in Sources */,
 				AB59A5BA1E307AB900EF3585 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -260,6 +269,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = QJYFTX722N;
 				INFOPLIST_FILE = TouchTracker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = dmsmith.TouchTracker;
@@ -272,6 +282,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = QJYFTX722N;
 				INFOPLIST_FILE = TouchTracker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = dmsmith.TouchTracker;
