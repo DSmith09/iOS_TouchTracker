@@ -11,6 +11,14 @@ import UIKit
 class DrawView: UIView {
     var currentLines: [NSValue: Line] = [NSValue: Line]()
     var finishedLines: [Line]! = [Line]()
+    var selectedLineIndex: Int? {
+        didSet {
+            if selectedLineIndex == nil {
+                let menu = UIMenuController.shared
+                menu.setMenuVisible(false, animated: true)
+            }
+        }
+    }
     
     // MARK: Interface Builder attributes
     @IBInspectable var finishedLineColor: UIColor = UIColor.black {
@@ -31,6 +39,48 @@ class DrawView: UIView {
         }
     }
     
+    // MARK: UIGesture Init
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        
+        // Double Tap
+        let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(DrawView.doubleTap))
+        doubleTapRecognizer.numberOfTapsRequired = 2
+        // Delays UIResponder Event TouchesBegan if possible this gesture recognizer can still be called
+        doubleTapRecognizer.delaysTouchesBegan = true
+        addGestureRecognizer(doubleTapRecognizer)
+        
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(DrawView.tap))
+        tapRecognizer.delaysTouchesBegan = true
+        // Delays Tap Gesture from claiming action until Double Tap Gesture fails out first
+        tapRecognizer.require(toFail: doubleTapRecognizer)
+        addGestureRecognizer(tapRecognizer)
+        
+        
+    }
+    
+    // When referencing an obj-c function -> specify with annotation and declare with #selector
+    @objc
+    func doubleTap(gestureRecognizer: UIGestureRecognizer) {
+        print("Double Tapped")
+        currentLines.removeAll(keepingCapacity: false)
+        finishedLines.removeAll(keepingCapacity: false)
+    }
+    
+    @objc
+    func tap(gestureRecognizer: UIGestureRecognizer) {
+        print("Tapped")
+        let menuController = UIMenuController.shared
+        if selectedLineIndex != nil {
+            // Set the DrawView as the First Responder
+            becomeFirstResponder()
+            let deleteItem = UIMenuItem(title: "Delete", action: #selector(DrawView.deleteLine))
+            menuController.menuItems = [deleteItem]
+            menuController.setTargetRect(CGRect.init(x: 2, y: 2, width: 2, height: 2), in: self)
+        }
+        
+    }
+    
     // MARK: Draw
     override func draw(_ rect: CGRect) {
         // Draw finished lines in black
@@ -42,6 +92,12 @@ class DrawView: UIView {
         currentLineColor.setStroke()
         for (_, line) in currentLines {
             strokeLine(line: line)
+        }
+        
+        if let index = selectedLineIndex {
+            UIColor.green.setStroke()
+            let selectedLine = finishedLines[index]
+            strokeLine(line: selectedLine)
         }
     }
     
@@ -94,7 +150,20 @@ class DrawView: UIView {
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         print(#function)
         currentLines.removeAll()
-        
         setNeedsDisplay()
+    }
+    
+    // MARK: Utility Methods
+    override func becomeFirstResponder() -> Bool {
+        return true
+    }
+    
+    func deleteLine(sender: AnyObject) {
+        if let index = selectedLineIndex  {
+            finishedLines.remove(at: index)
+            selectedLineIndex = nil
+            
+            setNeedsDisplay()
+        }
     }
 }
